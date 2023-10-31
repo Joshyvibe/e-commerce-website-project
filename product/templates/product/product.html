@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+
+    <div class="max-w-6xl mx-auto flex flex-wrap py-6 px-6 xl:px-0">
+        <div class="images w-full mb-6 lg:mb-0 lg:w-3/5">
+            <img class="shadow-2xl rounded-xl bg-gray-100 max-w-3xl mx-auto py-2 px-4 zl:px-0 m-4" src="{% if product.image %}{{product.image.url}}{% else %}https://via.placeholder.com/240x240x.jpg{% endif %}" alt="">
+        </div>
+   
+
+        <div class="information w-full lg:w-2/5 lg:p-6">
+            <h1 class="text-2xl">{{ product.name }}</h1>
+
+            <p class="mt-1 text-gray-400">${{ product.get_display_price }}</p>
+
+            {% if product.get_rating > 0 %}
+                <p class="mt-1 text-red-400">Rating: {{ product.get_rating }} / 6</p>
+            {% endif %}
+            {% if product.description %}
+                <p class="mt-6 text-gray-800">
+                    {{product.description}}
+                </p>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="notification text-red-400">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form action="{% url 'product' product.slug %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <input type="number" name="quantity" value="1" min="1" class="w-full mt-2 py-4 px-6 bg-white rounded-xl">
+                </div>
+                <div>
+                    <button class="py-4 px-6 rounded-xl text-white bg-red-500 hover:bg-red-700">Add to Cart</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="w-full mt-6">
+            <h1 class="text-xl">
+                Reviews
+            </h1>
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'product' product.slug %}" method="post" class="mt-4 mb-6 p-6 bg-gray-100 rounded-xl">
+                    {% csrf_token %}
+                    <div>
+                        <label for="rating">Rating</label>
+                        <select name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="content">Comment</label>
+                        <textarea name="content" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div>
+                        <button>Submit</button>
+                    </div>
+                </form>
+            {% endif %}
+            
+            {% if product.review.all %}
+                
+                {% for review in product.review.all %}
+                    <div class="px-4 py-6 bg-gray-100 rounded-xl mb-4">
+                        <strong>Rating: </strong>{{ review.rating }}/6 <br>
+                        <strong>Date: </strong>{{ review.created_at | date:"Y-m-d"}}<br>
+                        <strong>Comment: </strong><br>
+                        {{ review.content }}
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <p>There are no reviews for the product</p>  
+            {% endif %}  
+        </div>
+    </div>
+{% endblock %}
