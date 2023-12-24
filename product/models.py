@@ -10,7 +10,7 @@ class Category(models.Model):
     slug = models.SlugField()
 
 
-    class Mata:
+    class Meta:
         verbose_name_plural = 'Categories'
         ordering = ('name',)
 
@@ -28,7 +28,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
 
-    class Mata:
+    class Meta:
         ordering = ('-created_at',)
 
     def __str__(self):
