@@ -32,7 +32,6 @@ def shop(request):
 
     return render(request, 'core/shop.html', context)
 
-
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -48,12 +47,9 @@ def signup(request):
 
     return render(request, 'core/signup.html', {'form': form})
 
-
-
 @login_required
 def account(request):
     return render(request, 'core/account.html')
-
 
 @login_required
 def edit_account(request):
