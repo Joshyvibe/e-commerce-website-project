@@ -1,11 +1,8 @@
 import json
 import stripe
-
 from django.conf import settings
 from django.http import JsonResponse
-
 from cart.cart import Cart
-
 from .models import Order, OrderItem
 
 def start_order(request):
